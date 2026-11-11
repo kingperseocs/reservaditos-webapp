@@ -1,0 +1,57 @@
+<app-page-header title="Solicitudes por aprobar" [subtitle]="subtitle()" />
+
+<div class="toolbar">
+  <app-request-filters
+    [filters]="store.filters()"
+    [areas]="areas()"
+    [months]="months"
+    (changed)="onFiltersChange($event)"
+  />
+  <button
+    mat-stroked-button
+    class="refresh"
+    matTooltip="Se actualiza sola cada 10 segundos"
+    [disabled]="store.loading()"
+    (click)="refresh()"
+  >
+    <span class="material-symbols-outlined" aria-hidden="true">refresh</span>
+    Actualizar
+  </button>
+</div>
+
+@if (store.error(); as error) {
+  <div class="error-banner" role="alert">
+    <span class="material-symbols-outlined" aria-hidden="true">cloud_off</span>
+    <span>{{ error.message }}</span>
+    <button mat-button (click)="refresh()">Reintentar</button>
+  </div>
+}
+
+@if (!store.error() || store.totalPending() > 0) {
+  <section class="card" aria-label="Solicitudes por aprobar">
+    @if (store.loading() && !store.loaded()) {
+      <mat-progress-bar mode="indeterminate" />
+    }
+
+    @if (store.visible().length > 0) {
+      <app-requests-table
+        [requests]="store.visible()"
+        [now]="store.now()"
+        [busyIds]="store.busyIds()"
+        [newIds]="store.newIds()"
+        (approve)="approve($event)"
+        (reject)="reject($event)"
+      />
+    } @else if (store.loaded()) {
+      <app-empty-state
+        icon="task_alt"
+        title="No hay solicitudes por aprobar"
+        description="Cuando un residente pida un área desde la app, su solicitud aparecerá aquí sola."
+      />
+    }
+  </section>
+
+  @if (store.loaded()) {
+    <p class="footer">{{ footer() }}</p>
+  }
+}

@@ -1,0 +1,51 @@
+:host {
+  display: block;
+  max-width: 1280px;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.refresh .material-symbols-outlined {
+  font-size: 18px;
+  margin-right: 4px;
+}
+
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 10px 12px 10px 16px;
+  border: 1px solid var(--rs-color-danger-border);
+  border-radius: var(--rs-radius-sm);
+  background: var(--rs-color-danger-soft);
+  color: var(--rs-color-danger);
+  font-size: 14px;
+
+  span:nth-child(2) {
+    flex: 1;
+  }
+}
+
+.card {
+  overflow: hidden;
+  background: var(--rs-color-surface);
+  border: 1px solid var(--rs-color-border);
+  border-radius: var(--rs-radius-md);
+
+  app-empty-state {
+    --rs-empty-border: 0;
+  }
+}
+
+.footer {
+  margin: 24px 0 0;
+  color: var(--rs-color-text-muted);
+  font-size: 14px;
+}
