@@ -33,7 +33,9 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.scss"]
+            "styles": [
+              "src/styles.scss"
+            ]
           },
           "configurations": {
             "production": {
@@ -61,6 +63,17 @@
                   "with": "src/environments/environment.development.ts"
                 }
               ]
+            },
+            "aws": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.aws.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -73,6 +86,9 @@
             },
             "development": {
               "buildTarget": "reservaditos-webapp:build:development"
+            },
+            "aws": {
+              "buildTarget": "reservaditos-webapp:build:aws"
             }
           },
           "defaultConfiguration": "development"
@@ -83,7 +99,10 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
           }
         }
       }

@@ -18,19 +18,36 @@ Web de la administración del **Edificio Demo**. Los residentes piden áreas com
 
 ## Requisitos
 - Node **26 LTS** (`.nvmrc`; mínimo 22.22)
-- pnpm 10
-- El backend corriendo en `http://localhost:8000` (ver su README: `docker compose up -d`, `pnpm seed`, `pnpm start:dev`)
+- pnpm 10 (si no lo tienes: `corepack enable`, viene con Node)
+- El backend corriendo en `http://localhost:8000` (ver [su README](https://github.com/kingperseocs/reservaditos-backend#cómo-correrlo)), **o** usar el backend en AWS (abajo)
 
 ## Cómo correrlo
 ```bash
+git clone https://github.com/kingperseocs/reservaditos-webapp.git
+cd reservaditos-webapp
 pnpm install
 pnpm start          # http://localhost:4200
+```
+Abre http://localhost:4200: entras como administración (no hay login) y ves las solicitudes que el seed del backend dejó pendientes.
+
+### Contra el backend desplegado en AWS
+Angular no usa archivos `.env`: la configuración vive en `src/environments/*.ts` y se elige **al compilar** con `fileReplacements` en `angular.json`.
+
+| Archivo | Configuración | API |
+|---|---|---|
+| `environment.development.ts` | `pnpm start` | `http://localhost:8000/v1` |
+| `environment.aws.ts` | `pnpm start:aws` | `http://15.229.3.0/v1` (demo en EC2, activa del 11 al 13/11/2026) |
+| `environment.ts` | `pnpm build` | producción |
+
+```bash
+pnpm start:aws      # http://localhost:4200, sin backend local
 ```
 
 ## Scripts
 | Comando | Qué hace |
 |---|---|
 | `pnpm start` | Servidor de desarrollo en el puerto 4200 |
+| `pnpm start:aws` | Igual, pero contra el backend en AWS |
 | `pnpm test` | Tests unitarios (Vitest) |
 | `pnpm lint` | ESLint (angular-eslint) |
 | `pnpm build` | Build de producción en `dist/` |
