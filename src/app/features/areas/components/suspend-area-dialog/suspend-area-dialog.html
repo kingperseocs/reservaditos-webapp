@@ -1,0 +1,104 @@
+<header class="dialog-header">
+  <h2 mat-dialog-title>Suspender {{ data.area.name }}</h2>
+  <button type="button" class="close" mat-dialog-close aria-label="Cerrar">
+    <span class="material-symbols-outlined" aria-hidden="true">close</span>
+  </button>
+</header>
+
+<mat-dialog-content>
+  <form [formGroup]="form" (ngSubmit)="confirm()" id="suspend-form">
+    <label class="field-label" for="suspend-reason">Motivo</label>
+    <textarea
+      id="suspend-reason"
+      class="reason"
+      rows="3"
+      maxlength="300"
+      placeholder="Mantenimiento programado"
+      formControlName="reason"
+    ></textarea>
+
+    <div class="dates">
+      <div>
+        <label class="field-label" for="suspend-from">Desde</label>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="date-field">
+          <input
+            matInput
+            id="suspend-from"
+            formControlName="from"
+            placeholder="dd/mm/aaaa"
+            [matDatepicker]="fromPicker"
+            [min]="today"
+          />
+          <mat-datepicker-toggle matIconSuffix [for]="fromPicker">
+            <span matDatepickerToggleIcon class="material-symbols-outlined">calendar_today</span>
+          </mat-datepicker-toggle>
+          <mat-datepicker #fromPicker />
+        </mat-form-field>
+      </div>
+
+      <div>
+        <label class="field-label" for="suspend-to">Hasta</label>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="date-field">
+          <input
+            matInput
+            id="suspend-to"
+            formControlName="to"
+            placeholder="dd/mm/aaaa"
+            [matDatepicker]="toPicker"
+            [min]="form.controls.from.value ?? today"
+          />
+          <mat-datepicker-toggle matIconSuffix [for]="toPicker">
+            <span matDatepickerToggleIcon class="material-symbols-outlined">calendar_today</span>
+          </mat-datepicker-toggle>
+          <mat-datepicker #toPicker />
+        </mat-form-field>
+      </div>
+    </div>
+
+    @if (form.hasError('rangeOrder')) {
+      <p class="field-error">La fecha «Hasta» no puede ser anterior a «Desde».</p>
+    }
+
+    @let state = impact();
+    @if (state.status === 'loading') {
+      <p class="impact-hint">Revisando reservas en esas fechas…</p>
+    } @else if (state.status === 'error') {
+      <p class="impact-hint">No se pudo revisar las reservas de esas fechas.</p>
+    } @else if (state.status === 'ready' && state.impact.paidCount > 0) {
+      <div class="warning" role="status">
+        <span class="material-symbols-outlined" aria-hidden="true">warning</span>
+        <div>
+          <p class="warning-title">
+            Hay {{ state.impact.paidCount }}
+            {{ state.impact.paidCount === 1 ? 'reserva pagada' : 'reservas pagadas' }} en estas
+            fechas
+          </p>
+          <p class="warning-text">Se devuelve el 100 % a cada residente.</p>
+          @if (state.impact.unpaidCount > 0) {
+            <p class="warning-text">{{ unpaidText(state.impact.unpaidCount) }}</p>
+          }
+        </div>
+      </div>
+    } @else if (state.status === 'ready') {
+      <p class="impact-hint" role="status">
+        No hay reservas pagadas en estas fechas.
+        @if (state.impact.unpaidCount > 0) {
+          {{ unpaidText(state.impact.unpaidCount) }}
+        }
+      </p>
+    }
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button mat-dialog-close type="button">Cancelar</button>
+  <button
+    mat-flat-button
+    class="rs-button-danger"
+    type="submit"
+    form="suspend-form"
+    [disabled]="form.invalid"
+  >
+    Suspender área
+  </button>
+</mat-dialog-actions>
