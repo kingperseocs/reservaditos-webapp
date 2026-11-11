@@ -1,0 +1,66 @@
+@use '@angular/material' as mat;
+
+// Material 3 theme tuned to the Figma palette (blue primary, red errors, Inter).
+html {
+  color-scheme: light;
+
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$blue-palette,
+        tertiary: mat.$red-palette,
+        theme-type: light,
+      ),
+      typography: Inter,
+      density: 0,
+    )
+  );
+
+  @include mat.theme-overrides(
+    (
+      primary: #2563eb,
+      on-primary: #ffffff,
+      error: #dc2626,
+      surface: #ffffff,
+      on-surface: #0f172a,
+      on-surface-variant: #64748b,
+      outline: #e5e7eb,
+      outline-variant: #e5e7eb,
+      corner-small: 8px,
+      corner-medium: 12px,
+      corner-large: 16px,
+    )
+  );
+
+  @include mat.button-overrides(
+    (
+      filled-container-shape: 8px,
+      filled-container-height: 40px,
+      outlined-container-shape: 8px,
+      outlined-container-height: 40px,
+      outlined-outline-color: #e5e7eb,
+      text-container-shape: 8px,
+    )
+  );
+
+  @include mat.dialog-overrides(
+    (
+      container-shape: 16px,
+      container-color: #ffffff,
+    )
+  );
+
+  @include mat.form-field-overrides(
+    (
+      outlined-container-shape: 8px,
+      outlined-outline-color: #e5e7eb,
+    )
+  );
+
+  @include mat.table-overrides(
+    (
+      background-color: #ffffff,
+      row-item-outline-color: #e5e7eb,
+    )
+  );
+}

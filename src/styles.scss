@@ -1,0 +1,40 @@
+@use './styles/tokens';
+@use './styles/theme';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--rs-font-family);
+  color: var(--rs-color-text);
+  background: var(--rs-color-background);
+  -webkit-font-smoothing: antialiased;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
+// Danger button variant used by "Rechazar" and "Suspender área".
+.rs-button-danger.mat-mdc-unelevated-button:not(:disabled) {
+  --mat-button-filled-container-color: var(--rs-color-danger);
+  --mat-button-filled-label-text-color: #ffffff;
+}
+
+.rs-button-danger-outline.mat-mdc-outlined-button:not(:disabled) {
+  --mat-button-outlined-label-text-color: var(--rs-color-danger);
+  --mat-button-outlined-outline-color: var(--rs-color-danger-border);
+}
